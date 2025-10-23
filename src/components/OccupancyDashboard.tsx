@@ -1,11 +1,14 @@
 import { useAppStore } from '../store';
 import { useMemo, useState } from 'react';
+import { SkeletonList } from './SkeletonCard';
 
 export function OccupancyDashboard() {
   const occupancy = useAppStore(state => state.occupancy);
   const floors = useAppStore(state => state.floors);
   const selectedFloorId = useAppStore(state => state.selectedFloorId);
+  const setSelectedFloorId = useAppStore(state => state.setSelectedFloorId);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
+  const isLoading = floors.length === 0;
 
   // Calculate floor-level occupancy
   const floorOccupancy = useMemo(() => {
@@ -100,52 +103,62 @@ export function OccupancyDashboard() {
   };
 
   return (
-    <div className="absolute top-20 right-4 w-96 max-h-[calc(100vh-6rem)] overflow-y-auto bg-gray-800 bg-opacity-95 rounded-lg shadow-lg p-4 space-y-4">
+    <div className="absolute top-20 right-4 w-96 max-h-[calc(100vh-6rem)] overflow-y-auto bg-gray-800 bg-opacity-95 backdrop-blur-sm rounded-lg shadow-2xl p-4 space-y-4 transition-all duration-300 z-20">
       {/* Floor Summary Cards */}
       <div className="space-y-2">
-        <h2 className="text-lg font-semibold text-white">Floor Occupancy</h2>
-        <div className="space-y-2">
-          {floorOccupancy.map(floor => (
-            <div 
-              key={floor.floor_id}
-              className={`p-3 rounded-lg border-2 transition-colors ${
-                selectedFloorId === floor.floor_id 
-                  ? 'bg-blue-900 bg-opacity-50 border-blue-500' 
-                  : 'bg-gray-700 border-gray-600 hover:border-gray-500'
-              }`}
-            >
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="text-white font-medium">{floor.name}</h3>
-                <span className={`text-2xl font-bold ${getOccupancyColor(floor.percentage)}`}>
-                  {floor.current_count}
-                </span>
+        <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+          <span>🏢</span>
+          Floor Occupancy
+        </h2>
+        {isLoading ? (
+          <SkeletonList count={3} />
+        ) : (
+          <div className="space-y-2">
+            {floorOccupancy.map((floor, index) => (
+              <div 
+                key={floor.floor_id}
+                onClick={() => setSelectedFloorId(floor.floor_id)}
+                className={`p-3 rounded-lg border-2 transition-all duration-200 cursor-pointer transform hover:scale-[1.02] ${
+                  selectedFloorId === floor.floor_id 
+                    ? 'bg-blue-900 bg-opacity-50 border-blue-500 shadow-lg shadow-blue-500/20' 
+                    : 'bg-gray-700 border-gray-600 hover:border-gray-500 hover:shadow-lg'
+                }`}
+                style={{ animationDelay: `${index * 50}ms` }}
+              >
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="text-white font-medium">{floor.name}</h3>
+                  <span className={`text-2xl font-bold transition-colors ${getOccupancyColor(floor.percentage)}`}>
+                    {floor.current_count}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center text-sm text-gray-300 mb-2">
+                  <span>Capacity: {floor.capacity}</span>
+                  <span className={`font-semibold ${getOccupancyColor(floor.percentage)}`}>
+                    {floor.percentage.toFixed(0)}%
+                  </span>
+                </div>
+                {/* Progress bar */}
+                <div className="w-full bg-gray-600 rounded-full h-2 mb-2 overflow-hidden">
+                  <div 
+                    className={`h-2 rounded-full transition-all duration-500 ease-out ${getOccupancyBgColor(floor.percentage)}`}
+                    style={{ width: `${Math.min(floor.percentage, 100)}%` }}
+                  />
+                </div>
+                {/* Gender distribution mini bar */}
+                <div className="flex gap-2 text-xs text-gray-400">
+                  <span>♂ {floor.male_count}</span>
+                  <span>♀ {floor.female_count}</span>
+                </div>
               </div>
-              <div className="flex justify-between items-center text-sm text-gray-300 mb-2">
-                <span>Capacity: {floor.capacity}</span>
-                <span className={getOccupancyColor(floor.percentage)}>
-                  {floor.percentage.toFixed(0)}%
-                </span>
-              </div>
-              {/* Progress bar */}
-              <div className="w-full bg-gray-600 rounded-full h-2 mb-2">
-                <div 
-                  className={`h-2 rounded-full transition-all ${getOccupancyBgColor(floor.percentage)}`}
-                  style={{ width: `${Math.min(floor.percentage, 100)}%` }}
-                />
-              </div>
-              {/* Gender distribution mini bar */}
-              <div className="flex gap-2 text-xs text-gray-400">
-                <span>♂ {floor.male_count}</span>
-                <span>♀ {floor.female_count}</span>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Gender Distribution */}
       <div className="space-y-2">
-        <h2 className="text-lg font-semibold text-white">
+        <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+          <span>👥</span>
           Gender Distribution
           {selectedFloorId && (
             <span className="text-sm text-gray-400 ml-2">
@@ -153,7 +166,7 @@ export function OccupancyDashboard() {
             </span>
           )}
         </h2>
-        <div className="bg-gray-700 p-3 rounded-lg">
+        <div className="bg-gray-700 p-3 rounded-lg transition-all duration-300">
           {/* Horizontal bar chart */}
           <div className="space-y-3">
             <div>
@@ -161,9 +174,9 @@ export function OccupancyDashboard() {
                 <span>Male</span>
                 <span className="font-semibold">{genderDistribution.male} ({genderDistribution.malePercent.toFixed(0)}%)</span>
               </div>
-              <div className="w-full bg-gray-600 rounded-full h-3">
+              <div className="w-full bg-gray-600 rounded-full h-3 overflow-hidden">
                 <div 
-                  className="bg-blue-500 h-3 rounded-full transition-all"
+                  className="bg-blue-500 h-3 rounded-full transition-all duration-500 ease-out"
                   style={{ width: `${genderDistribution.malePercent}%` }}
                 />
               </div>
@@ -173,9 +186,9 @@ export function OccupancyDashboard() {
                 <span>Female</span>
                 <span className="font-semibold">{genderDistribution.female} ({genderDistribution.femalePercent.toFixed(0)}%)</span>
               </div>
-              <div className="w-full bg-gray-600 rounded-full h-3">
+              <div className="w-full bg-gray-600 rounded-full h-3 overflow-hidden">
                 <div 
-                  className="bg-pink-500 h-3 rounded-full transition-all"
+                  className="bg-pink-500 h-3 rounded-full transition-all duration-500 ease-out"
                   style={{ width: `${genderDistribution.femalePercent}%` }}
                 />
               </div>
@@ -185,9 +198,9 @@ export function OccupancyDashboard() {
                 <span>Unknown</span>
                 <span className="font-semibold">{genderDistribution.unknown} ({genderDistribution.unknownPercent.toFixed(0)}%)</span>
               </div>
-              <div className="w-full bg-gray-600 rounded-full h-3">
+              <div className="w-full bg-gray-600 rounded-full h-3 overflow-hidden">
                 <div 
-                  className="bg-gray-400 h-3 rounded-full transition-all"
+                  className="bg-gray-400 h-3 rounded-full transition-all duration-500 ease-out"
                   style={{ width: `${genderDistribution.unknownPercent}%` }}
                 />
               </div>
@@ -201,7 +214,8 @@ export function OccupancyDashboard() {
 
       {/* Room Occupancy List */}
       <div className="space-y-2">
-        <h2 className="text-lg font-semibold text-white">
+        <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+          <span>🚪</span>
           Room Occupancy
           {selectedFloorId && (
             <span className="text-sm text-gray-400 ml-2">
@@ -209,11 +223,11 @@ export function OccupancyDashboard() {
             </span>
           )}
         </h2>
-        <div className="space-y-2 max-h-96 overflow-y-auto">
+        <div className="space-y-2 max-h-96 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
           {roomOccupancy.length === 0 ? (
             <p className="text-gray-400 text-sm text-center py-4">No rooms to display</p>
           ) : (
-            roomOccupancy.map(room => {
+            roomOccupancy.map((room, index) => {
               const roomData = floors
                 .flatMap(f => f.rooms)
                 .find(r => r.room_id === room.room_id);
@@ -222,24 +236,25 @@ export function OccupancyDashboard() {
                 <div
                   key={room.room_id}
                   onClick={() => handleRoomClick(room.room_id)}
-                  className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                  className={`p-3 rounded-lg border cursor-pointer transition-all duration-200 transform hover:scale-[1.02] ${
                     selectedRoomId === room.room_id
-                      ? 'bg-blue-900 bg-opacity-50 border-blue-500'
-                      : 'bg-gray-700 border-gray-600 hover:border-gray-500 hover:bg-gray-650'
+                      ? 'bg-blue-900 bg-opacity-50 border-blue-500 shadow-lg shadow-blue-500/20'
+                      : 'bg-gray-700 border-gray-600 hover:border-gray-500 hover:shadow-lg'
                   }`}
+                  style={{ animationDelay: `${index * 30}ms` }}
                 >
                   <div className="flex justify-between items-center mb-2">
                     <h3 className="text-white font-medium text-sm">
                       {roomData?.name || 'Unknown Room'}
                     </h3>
-                    <span className={`text-xl font-bold ${getOccupancyColor(room.percentage)}`}>
+                    <span className={`text-xl font-bold transition-colors ${getOccupancyColor(room.percentage)}`}>
                       {room.current_count}/{room.capacity}
                     </span>
                   </div>
                   {/* Progress bar */}
-                  <div className="w-full bg-gray-600 rounded-full h-2 mb-2">
+                  <div className="w-full bg-gray-600 rounded-full h-2 mb-2 overflow-hidden">
                     <div 
-                      className={`h-2 rounded-full transition-all ${getOccupancyBgColor(room.percentage)}`}
+                      className={`h-2 rounded-full transition-all duration-500 ease-out ${getOccupancyBgColor(room.percentage)}`}
                       style={{ width: `${Math.min(room.percentage, 100)}%` }}
                     />
                   </div>

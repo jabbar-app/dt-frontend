@@ -98,17 +98,22 @@ export function AlertPanel() {
   const resolvedCount = alerts.filter(a => a.status === 'resolved').length;
 
   return (
-    <div className="absolute bottom-4 left-4 w-96 max-h-[60vh] bg-gray-800 bg-opacity-95 rounded-lg shadow-lg overflow-hidden">
+    <div className="absolute bottom-4 left-4 w-96 max-h-[60vh] bg-gray-800 bg-opacity-95 backdrop-blur-sm rounded-lg shadow-2xl overflow-hidden transition-all duration-300 z-20">
       {/* Header */}
       <div className="bg-gray-900 p-4 border-b border-gray-700">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-lg font-semibold text-white flex items-center gap-2">
             <span>🔔</span>
             Alerts
+            {activeCount > 0 && (
+              <span className="ml-2 px-2 py-1 text-xs bg-red-600 text-white rounded-full animate-pulse">
+                {activeCount}
+              </span>
+            )}
           </h2>
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-gray-400 hover:text-white transition-all duration-200 transform hover:scale-110"
           >
             {isExpanded ? '▼' : '▲'}
           </button>
@@ -214,21 +219,22 @@ export function AlertPanel() {
             <p className="text-gray-400 text-sm text-center py-8">No alerts to display</p>
           ) : (
             <div className="space-y-2">
-              {filteredAlerts.map(alert => (
+              {filteredAlerts.map((alert, index) => (
                 <div
                   key={alert.alert_id}
                   onClick={() => handleAlertClick(alert)}
-                  className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${
+                  className={`p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 transform hover:scale-[1.02] ${
                     selectedAlert === alert.alert_id
-                      ? 'bg-blue-900 bg-opacity-50 border-blue-500'
-                      : 'bg-gray-700 border-gray-600 hover:border-gray-500'
+                      ? 'bg-blue-900 bg-opacity-50 border-blue-500 shadow-lg shadow-blue-500/20'
+                      : 'bg-gray-700 border-gray-600 hover:border-gray-500 hover:shadow-lg'
                   }`}
+                  style={{ animationDelay: `${index * 50}ms` }}
                 >
                   <div className="flex items-start gap-2 mb-2">
                     <span className="text-lg">{getSeverityIcon(alert.severity)}</span>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-1">
-                        <span className={`font-semibold text-sm uppercase ${getSeverityColor(alert.severity)}`}>
+                        <span className={`font-semibold text-sm uppercase tracking-wide ${getSeverityColor(alert.severity)}`}>
                           {alert.severity}
                         </span>
                         {getStatusBadge(alert.status)}
@@ -257,7 +263,7 @@ export function AlertPanel() {
                   {alert.status === 'active' && (
                     <button
                       onClick={(e) => handleAcknowledge(alert.alert_id, e)}
-                      className="w-full mt-2 px-3 py-1 text-xs bg-yellow-600 hover:bg-yellow-700 text-white rounded transition-colors"
+                      className="w-full mt-2 px-3 py-1 text-xs bg-yellow-600 hover:bg-yellow-700 text-white rounded transition-all duration-200 transform hover:scale-105"
                     >
                       Acknowledge
                     </button>

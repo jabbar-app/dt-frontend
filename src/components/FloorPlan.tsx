@@ -14,10 +14,10 @@ export function FloorPlan({ floor }: FloorPlanProps) {
   // Generate floor geometry from room boundaries
   const floorGeometry = useMemo(() => {
     const shapes: THREE.Shape[] = [];
-    
+
     floor.rooms.forEach(room => {
       const shape = new THREE.Shape();
-      
+
       // Create shape from boundary points
       room.boundary.forEach((point, index) => {
         if (index === 0) {
@@ -27,10 +27,10 @@ export function FloorPlan({ floor }: FloorPlanProps) {
         }
       });
       shape.closePath();
-      
+
       shapes.push(shape);
     });
-    
+
     return shapes;
   }, [floor]);
 
@@ -43,7 +43,7 @@ export function FloorPlan({ floor }: FloorPlanProps) {
       {floor.rooms.map((room, index) => {
         const shape = floorGeometry[index];
         const isHighlighted = highlightedRoomId === room.room_id;
-        
+
         // Get color based on zone type
         const getZoneColor = () => {
           if (isHighlighted) {
@@ -62,23 +62,23 @@ export function FloorPlan({ floor }: FloorPlanProps) {
         return (
           <group key={room.room_id}>
             {/* Floor surface */}
-            <mesh 
-              position={[0, 0, 0]} 
+            <mesh
+              position={[0, 0, 0]}
               rotation={[-Math.PI / 2, 0, 0]}
               receiveShadow
             >
               <shapeGeometry args={[shape]} />
-              <meshStandardMaterial 
+              <meshStandardMaterial
                 color={isHighlighted ? '#fef3c7' : '#1f2937'}
                 side={THREE.DoubleSide}
                 transparent
                 opacity={isHighlighted ? 0.95 : 0.9}
               />
             </mesh>
-            
+
             {/* Room walls (extruded boundaries) */}
-            <mesh 
-              position={[0, 0, 0]} 
+            <mesh
+              position={[0, 0, 0]}
               rotation={[-Math.PI / 2, 0, 0]}
               castShadow
             >
@@ -91,7 +91,7 @@ export function FloorPlan({ floor }: FloorPlanProps) {
                   },
                 ]}
               />
-              <meshStandardMaterial 
+              <meshStandardMaterial
                 color={getZoneColor()}
                 transparent
                 opacity={isHighlighted ? 0.9 : 0.6}
@@ -100,20 +100,20 @@ export function FloorPlan({ floor }: FloorPlanProps) {
                 emissiveIntensity={isHighlighted ? 0.3 : 0}
               />
             </mesh>
-            
+
             {/* Room boundary lines */}
             <lineSegments>
-              <edgesGeometry 
+              <edgesGeometry
                 args={[
                   new THREE.ExtrudeGeometry(shape, {
                     depth: 0.1,
                     bevelEnabled: false,
                   })
-                ]} 
+                ]}
               />
-              <lineBasicMaterial 
-                color={isHighlighted ? '#fbbf24' : '#ffffff'} 
-                linewidth={isHighlighted ? 3 : 2} 
+              <lineBasicMaterial
+                color={isHighlighted ? '#fbbf24' : '#ffffff'}
+                linewidth={isHighlighted ? 3 : 2}
               />
             </lineSegments>
 

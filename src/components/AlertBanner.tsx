@@ -45,20 +45,20 @@ export function AlertBanner() {
 
   return (
     <div
-      className={`absolute top-20 left-1/2 transform -translate-x-1/2 z-20 min-w-96 max-w-2xl cursor-pointer transition-all hover:scale-105 ${getSeverityStyles(
+      className={`absolute top-20 left-1/2 transform -translate-x-1/2 z-30 min-w-96 max-w-2xl cursor-pointer transition-all duration-300 hover:scale-105 animate-slide-down ${getSeverityStyles(
         topAlert.severity
-      )} border-2 rounded-lg shadow-lg p-4 animate-pulse`}
+      )} border-2 rounded-lg shadow-2xl p-4`}
       onClick={() => setSelectedAlert(topAlert.alert_id)}
     >
       <div className="flex items-center gap-3">
-        <span className="text-2xl">{getSeverityIcon(topAlert.severity)}</span>
+        <span className="text-2xl animate-pulse">{getSeverityIcon(topAlert.severity)}</span>
         <div className="flex-1">
           <div className="flex items-center justify-between">
-            <span className="font-bold uppercase text-sm">
+            <span className="font-bold uppercase text-sm tracking-wide">
               {topAlert.severity} Alert
             </span>
             {activeCount > 1 && (
-              <span className="text-xs bg-white bg-opacity-20 px-2 py-1 rounded">
+              <span className="text-xs bg-white bg-opacity-20 px-2 py-1 rounded animate-pulse">
                 +{activeCount - 1} more
               </span>
             )}

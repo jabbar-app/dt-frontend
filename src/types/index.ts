@@ -71,3 +71,23 @@ export interface AnchorLocation {
   position: { x: number; y: number; z: number };
   floor_id: string;
 }
+
+export interface OccupancyTrendData {
+  timestamp: number;
+  count: number;
+  male_count: number;
+  female_count: number;
+}
+
+export interface HeatmapData {
+  floor_id: string;
+  grid: number[][];
+  cell_size: number;
+  max_value: number;
+  bounds: {
+    min_x: number;
+    max_x: number;
+    min_y: number;
+    max_y: number;
+  };
+}

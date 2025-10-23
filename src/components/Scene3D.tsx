@@ -15,12 +15,16 @@ const dataGenerator = new DummyDataGenerator();
 export function Scene3D() {
   const floors = useAppStore(state => state.floors);
   const selectedFloorId = useAppStore(state => state.selectedFloorId);
+  const isPlaybackMode = useAppStore(state => state.isPlaybackMode);
   const setFloors = useAppStore(state => state.setFloors);
   const setCameras = useAppStore(state => state.setCameras);
   const setAnchors = useAppStore(state => state.setAnchors);
   const setEntities = useAppStore(state => state.setEntities);
   const setAlerts = useAppStore(state => state.setAlerts);
   const setOccupancy = useAppStore(state => state.setOccupancy);
+  const analyticsTimeRange = useAppStore(state => state.analyticsTimeRange);
+  const setOccupancyTrend = useAppStore(state => state.setOccupancyTrend);
+  const setHeatmapData = useAppStore(state => state.setHeatmapData);
 
   // Initialize data on mount
   useEffect(() => {
@@ -32,18 +36,56 @@ export function Scene3D() {
     setCameras(dataGenerator.getCameras());
     setAnchors(dataGenerator.getAnchors());
 
-    // Start real-time updates
-    dataGenerator.start((data) => {
-      setEntities(data.entities);
-      setAlerts(data.alerts);
-      setOccupancy(data.occupancy);
-    });
+    // Start real-time updates only if not in playback mode
+    if (!isPlaybackMode) {
+      dataGenerator.start((data) => {
+        setEntities(data.entities);
+        setAlerts(data.alerts);
+        setOccupancy(data.occupancy);
+      });
+    }
 
     // Cleanup on unmount
     return () => {
       dataGenerator.stop();
     };
-  }, [setFloors, setCameras, setAnchors, setEntities, setAlerts, setOccupancy]);
+  }, [setFloors, setCameras, setAnchors, setEntities, setAlerts, setOccupancy, isPlaybackMode]);
+
+  // Stop/start real-time updates when playback mode changes
+  useEffect(() => {
+    if (isPlaybackMode) {
+      dataGenerator.stop();
+    } else {
+      dataGenerator.start((data) => {
+        setEntities(data.entities);
+        setAlerts(data.alerts);
+        setOccupancy(data.occupancy);
+      });
+    }
+
+    return () => {
+      if (!isPlaybackMode) {
+        dataGenerator.stop();
+      }
+    };
+  }, [isPlaybackMode, setEntities, setAlerts, setOccupancy]);
+
+  // Update analytics data when time range changes
+  useEffect(() => {
+    const timeRangeHours = analyticsTimeRange === '1h' ? 1 :
+                           analyticsTimeRange === '6h' ? 6 :
+                           analyticsTimeRange === '24h' ? 24 : 168; // 7 days
+    
+    // Generate occupancy trend data
+    const trendData = dataGenerator.generateOccupancyTrend(timeRangeHours);
+    setOccupancyTrend(trendData);
+
+    // Generate heatmap data for selected floor
+    if (selectedFloorId) {
+      const heatmap = dataGenerator.generateHeatmap(selectedFloorId);
+      setHeatmapData(heatmap);
+    }
+  }, [analyticsTimeRange, selectedFloorId, setOccupancyTrend, setHeatmapData]);
 
   // Get selected floor or default to first floor
   const selectedFloor = floors.find(f => f.floor_id === selectedFloorId) || floors[0];
