@@ -18,7 +18,7 @@ export function EntityLabel({ entity }: EntityLabelProps) {
 
   return (
     <Html
-      position={[entity.position.x, entity.position.z + 2.2, entity.position.y]}
+      position={[entity.position.x, entity.position.z + 2.2, -entity.position.y]}
       center
       distanceFactor={8}
       style={{

@@ -379,7 +379,7 @@ export class DummyDataGenerator {
         position: {
           x: room.center.x + randomBetween(-3, 3),
           y: room.center.y + randomBetween(-3, 3),
-          z: floor.level * 3, // 3 meters per floor
+          z: (floor.level - 1) * 3, // 3 meters per floor, level 1 => 0
         },
         floor_id: floor.floor_id,
         room_id: room.room_id,
@@ -851,7 +851,7 @@ export class DummyDataGenerator {
         position: {
           x: roomData.room.center.x + randomBetween(-2, 2),
           y: roomData.room.center.y + randomBetween(-2, 2),
-          z: roomData.floor.level * 3,
+          z: (roomData.floor.level - 1) * 3,
         },
         velocity: { x: 0, y: 0 },
         targetPosition: {
@@ -906,7 +906,7 @@ export class DummyDataGenerator {
         // Update position
         state.position.x += state.velocity.x;
         state.position.y += state.velocity.y;
-        state.position.z = state.currentRoom.floor.level * 3;
+        state.position.z = (state.currentRoom.floor.level - 1) * 3;
 
         // Create entity snapshot
         const entity: FusedEntity = {

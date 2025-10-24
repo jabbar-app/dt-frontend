@@ -25,8 +25,8 @@ export function EntityAvatar({ entity, targetPosition }: EntityAvatarProps) {
       const lerpFactor = 0.15; // Smoothing factor (lower = smoother)
 
       current.x += (targetPosition.x - current.x) * lerpFactor;
-      current.y += (targetPosition.z + 0.9 - current.y) * lerpFactor; // +0.9 to lift avatar above ground
-      current.z += (targetPosition.y - current.z) * lerpFactor;
+      current.y += (targetPosition.z + 0.9 - current.y) * lerpFactor; // Y is height
+      current.z += ((-targetPosition.y) - current.z) * lerpFactor;
     }
   });
 
@@ -37,7 +37,7 @@ export function EntityAvatar({ entity, targetPosition }: EntityAvatarProps) {
       {/* Simple humanoid representation using cylinders */}
       <mesh
         ref={meshRef}
-        position={[entity.position.x, entity.position.z + 0.9, entity.position.y]}
+        position={[entity.position.x, entity.position.z + 0.9, -entity.position.y]}
         castShadow
       >
         {/* Body */}
@@ -53,7 +53,7 @@ export function EntityAvatar({ entity, targetPosition }: EntityAvatarProps) {
 
       {/* Head */}
       <mesh
-        position={[entity.position.x, entity.position.z + 1.7, entity.position.y]}
+        position={[entity.position.x, entity.position.z + 1.7, -entity.position.y]}
         castShadow
       >
         <sphereGeometry args={[0.15, 16, 16]} />

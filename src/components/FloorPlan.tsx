@@ -38,7 +38,7 @@ export function FloorPlan({ floor }: FloorPlanProps) {
   const floorHeight = (floor.level - 1) * 3;
 
   return (
-    <group position={[0, 0, floorHeight]}>
+    <group position={[0, floorHeight, 0]}>
       {/* Render each room as an extruded polygon */}
       {floor.rooms.map((room, index) => {
         const shape = floorGeometry[index];
@@ -102,24 +102,26 @@ export function FloorPlan({ floor }: FloorPlanProps) {
             </mesh>
 
             {/* Room boundary lines */}
-            <lineSegments>
-              <edgesGeometry
-                args={[
-                  new THREE.ExtrudeGeometry(shape, {
-                    depth: 0.1,
-                    bevelEnabled: false,
-                  })
-                ]}
-              />
-              <lineBasicMaterial
-                color={isHighlighted ? '#fbbf24' : '#ffffff'}
-                linewidth={isHighlighted ? 3 : 2}
-              />
-            </lineSegments>
+            <group rotation={[-Math.PI / 2, 0, 0]}>
+              <lineSegments>
+                <edgesGeometry
+                  args={[
+                    new THREE.ExtrudeGeometry(shape, {
+                      depth: 0.1,
+                      bevelEnabled: false,
+                    })
+                  ]}
+                />
+                <lineBasicMaterial
+                  color={isHighlighted ? '#fbbf24' : '#ffffff'}
+                  linewidth={isHighlighted ? 3 : 2}
+                />
+              </lineSegments>
+            </group>
 
             {/* Room label */}
             <Text
-              position={[room.center.x, room.center.y, 0.15]}
+              position={[room.center.x, 0.15, -room.center.y]}
               rotation={[-Math.PI / 2, 0, 0]}
               fontSize={isHighlighted ? 1.0 : 0.8}
               color={isHighlighted ? '#fbbf24' : '#ffffff'}

@@ -14,15 +14,14 @@ const SOURCE_COLORS = {
 };
 
 export function EntityTrajectory({ entity }: EntityTrajectoryProps) {
-  // Convert trajectory to Three.js coordinates
-  // Note: In Three.js, Y is up, so we map: entity.x -> x, entity.z -> y, entity.y -> z
+  // Convert trajectory to Three.js coordinates (X,Z on plane, Y is height)
   const points = useMemo(() => {
     if (entity.trajectory.length < 2) return [];
     
     return entity.trajectory.map(point => [
       point.x,
-      point.z + 0.1, // Slightly above ground
-      point.y,
+      point.z + 0.1, // Slightly above ground (Y)
+      -point.y,
     ] as [number, number, number]);
   }, [entity.trajectory]);
 

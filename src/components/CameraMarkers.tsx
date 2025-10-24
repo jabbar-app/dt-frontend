@@ -14,7 +14,7 @@ export function CameraMarkers({ floorId }: CameraMarkersProps) {
   return (
     <group>
       {floorCameras.map(camera => (
-        <group key={camera.camera_id} position={[camera.position.x, camera.position.y, camera.position.z]}>
+        <group key={camera.camera_id} position={[camera.position.x, camera.position.z, -camera.position.y]}>
           {/* Camera body (sphere) */}
           <Sphere args={[0.3, 16, 16]} castShadow>
             <meshStandardMaterial color="#10b981" emissive="#10b981" emissiveIntensity={0.3} />

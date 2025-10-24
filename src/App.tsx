@@ -17,6 +17,8 @@ import type { FusedEntity } from './types';
 
 function App() {
   const showAnalytics = useAppStore(state => state.showAnalytics);
+  const isSimulationOnly = useAppStore(state => state.isSimulationOnly);
+  const setIsSimulationOnly = useAppStore(state => state.setIsSimulationOnly);
   const setShowAnalytics = useAppStore(state => state.setShowAnalytics);
   const selectedFloorId = useAppStore(state => state.selectedFloorId);
   const setSelectedFloorId = useAppStore(state => state.setSelectedFloorId);
@@ -95,6 +97,7 @@ function App() {
     onPlayPause: isPlaybackMode ? handlePlayPause : undefined,
     onRestart: handleRestart,
     onToggleAnalytics: () => setShowAnalytics(!showAnalytics),
+    onToggleSimulationOnly: () => setIsSimulationOnly(!isSimulationOnly),
     onNavigateUp: () => handleNavigateFloors('up'),
     onNavigateDown: () => handleNavigateFloors('down'),
   });
@@ -105,11 +108,9 @@ function App() {
 
   return (
     <div className="w-full h-screen bg-gray-900 overflow-hidden transition-colors duration-300">
-      <Header />
-      
-      <PlaybackPanel />
-      
-      {isPlaybackMode && (
+      {!isSimulationOnly && <Header />}
+      {!isSimulationOnly && <PlaybackPanel />}
+      {!isSimulationOnly && isPlaybackMode && (
         <div className="animate-slide-down">
           <PlaybackControls
             isPlaying={isPlaying}
@@ -123,26 +124,32 @@ function App() {
           />
         </div>
       )}
-      
-      {!isPlaybackMode && (
+      {!isSimulationOnly && !isPlaybackMode && (
         <div className="animate-fade-in">
           <AlertBanner />
           <AlertPanel />
         </div>
       )}
-      
-      <div className="animate-slide-up">
-        <OccupancyDashboard />
-      </div>
-      
-      {showAnalytics && (
+      {!isSimulationOnly && (
+        <div className="animate-slide-up">
+          <OccupancyDashboard />
+        </div>
+      )}
+      {!isSimulationOnly && showAnalytics && (
         <div className="animate-scale-in">
           <AnalyticsDashboard />
         </div>
       )}
-      
-      <DemoControls onRestart={handleRestart} />
-      
+      {!isSimulationOnly && <DemoControls onRestart={handleRestart} />}
+      {isSimulationOnly && (
+        <button
+          onClick={() => setIsSimulationOnly(false)}
+          className="absolute top-4 right-4 z-30 px-3 py-2 bg-gray-800 hover:bg-gray-700 text-gray-200 text-sm font-medium rounded shadow"
+          title="Exit simulation-only (F)"
+        >
+          Exit Simulation View
+        </button>
+      )}
       <Scene3D />
     </div>
   );

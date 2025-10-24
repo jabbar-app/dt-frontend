@@ -7,6 +7,10 @@ interface AppState {
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
   
+  // Simulation-only view
+  isSimulationOnly: boolean;
+  setIsSimulationOnly: (enabled: boolean) => void;
+  
   // Floor data
   floors: Floor[];
   selectedFloorId: string | null;
@@ -63,6 +67,10 @@ interface AppState {
 export const useAppStore = create<AppState>((set, get) => ({
   isLoading: false,
   setIsLoading: (loading: boolean) => set({ isLoading: loading }),
+  
+  // Simulation-only view
+  isSimulationOnly: false,
+  setIsSimulationOnly: (enabled: boolean) => set({ isSimulationOnly: enabled }),
   
   floors: [],
   selectedFloorId: null,

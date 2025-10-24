@@ -14,7 +14,7 @@ export function AnchorMarkers({ floorId }: AnchorMarkersProps) {
   return (
     <group>
       {floorAnchors.map(anchor => (
-        <group key={anchor.anchor_id} position={[anchor.position.x, anchor.position.y, anchor.position.z]}>
+        <group key={anchor.anchor_id} position={[anchor.position.x, anchor.position.z, -anchor.position.y]}>
           {/* Anchor body (box) */}
           <Box args={[0.4, 0.4, 0.4]} castShadow>
             <meshStandardMaterial color="#8b5cf6" emissive="#8b5cf6" emissiveIntensity={0.3} />

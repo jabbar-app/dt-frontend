@@ -3,6 +3,8 @@ import { useAppStore } from '../store';
 export function Header() {
   const isPlaybackMode = useAppStore(state => state.isPlaybackMode);
   const isLoading = useAppStore(state => state.isLoading);
+  const isSimulationOnly = useAppStore(state => state.isSimulationOnly);
+  const setIsSimulationOnly = useAppStore(state => state.setIsSimulationOnly);
 
   return (
     <header className="absolute top-0 left-0 right-0 z-10 bg-gradient-to-b from-gray-900 to-transparent">
@@ -46,6 +48,16 @@ export function Header() {
             <div className="text-gray-400 text-xs uppercase tracking-wider">Powered by</div>
             <div className="text-white font-semibold">BlueIOT RTLS</div>
           </div>
+
+          <button
+            onClick={() => setIsSimulationOnly(!isSimulationOnly)}
+            className={`px-3 py-2 rounded text-sm font-medium transition-colors border border-gray-600 ${
+              isSimulationOnly ? 'bg-gray-700 text-gray-200' : 'bg-gray-800 hover:bg-gray-700 text-gray-300'
+            }`}
+            title="Toggle simulation-only (F)"
+          >
+            {isSimulationOnly ? 'Show UI' : 'Hide UI'}
+          </button>
         </div>
       </div>
     </header>

@@ -11,7 +11,7 @@ export function RoomLabel({ room, floorLevel }: RoomLabelProps) {
   
   return (
     <Text
-      position={[room.center.x, room.center.y, floorHeight + 0.2]}
+      position={[room.center.x, floorHeight + 0.2, -room.center.y]}
       rotation={[-Math.PI / 2, 0, 0]}
       fontSize={0.8}
       color="#ffffff"

@@ -4,6 +4,7 @@ interface KeyboardShortcutsConfig {
   onPlayPause?: () => void;
   onRestart?: () => void;
   onToggleAnalytics?: () => void;
+  onToggleSimulationOnly?: () => void;
   onNavigateLeft?: () => void;
   onNavigateRight?: () => void;
   onNavigateUp?: () => void;
@@ -25,6 +26,11 @@ export function useKeyboardShortcuts(config: KeyboardShortcutsConfig) {
         case ' ':
           event.preventDefault();
           config.onPlayPause?.();
+          break;
+        case 'f':
+        case 'F':
+          event.preventDefault();
+          config.onToggleSimulationOnly?.();
           break;
         case 'r':
         case 'R':
