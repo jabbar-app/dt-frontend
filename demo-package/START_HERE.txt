@@ -1,0 +1,166 @@
+================================================================================
+  COMMAND CENTER BLUEIOT - DEMO PACKAGE
+  Version 1.0.0 | October 2025
+================================================================================
+
+🚀 QUICK START (30 seconds)
+================================================================================
+
+1. Double-click "index.html" to open in your browser
+2. Wait 2-3 seconds for the dashboard to load
+3. Watch entities move in real-time on the 3D floor plan
+
+That's it! No installation, no backend, no configuration needed.
+
+
+📖 WHAT YOU'RE SEEING
+================================================================================
+
+This is a fully functional demo of the Command Center BlueIOT Digital Twin
+Dashboard running with simulated data. It showcases:
+
+✓ 3D floor plan visualization with real-time tracking
+✓ Multi-source data fusion (Computer Vision + UWB positioning)
+✓ Occupancy analytics and demographic insights
+✓ Real-time alert system with severity levels
+✓ Historical playback with timeline controls
+✓ Analytics dashboard with trends and heatmaps
+
+
+🎯 RECOMMENDED READING ORDER
+================================================================================
+
+1. QUICKSTART.md       - Get started in 30 seconds
+2. README.md           - Complete user guide and features
+3. FEATURES.md         - Detailed feature descriptions
+
+For Presentations:
+4. PRESENTATION_GUIDE.md  - 15-minute executive presentation script
+5. SCREENSHOT_GUIDE.md    - Capture screenshots and videos
+
+For Deployment:
+6. DEPLOYMENT.md       - Deploy to web server or hosting service
+
+
+💡 KEY FEATURES TO TRY
+================================================================================
+
+1. Real-Time Tracking
+   - Watch colored avatars move through rooms
+   - Blue = CV only, Green = UWB only, Purple = Fused
+
+2. Occupancy Dashboard
+   - See live room counts on the left panel
+   - Click rooms to highlight them on 3D view
+
+3. Alert System
+   - Wait for alerts to appear at the top
+   - Click to see affected rooms
+   - Acknowledge to mark as handled
+
+4. Analytics
+   - Open Analytics panel for trends and heatmaps
+   - Switch time ranges (1h, 6h, 24h, 7d)
+
+5. Historical Playback
+   - Open Playback panel
+   - Select past time range
+   - Play at different speeds (1x to 16x)
+
+
+🖱️ CONTROLS
+================================================================================
+
+3D View:
+- Left Mouse: Rotate view
+- Right Mouse: Pan
+- Scroll Wheel: Zoom
+- Floor Selector: Switch floors (top-right)
+
+Keyboard Shortcuts:
+- Space: Play/Pause playback
+- Arrow Keys: Navigate timeline
+- 1-3: Switch floors
+- F11: Fullscreen mode
+
+
+🐛 TROUBLESHOOTING
+================================================================================
+
+Dashboard not loading?
+→ Try Chrome or Firefox browser
+→ Disable ad blockers
+→ Check browser console (F12) for errors
+
+3D view not rendering?
+→ Ensure WebGL is enabled in browser
+→ Update graphics drivers
+→ Try a different browser
+
+Slow performance?
+→ Close other browser tabs
+→ Use computer with dedicated GPU
+→ Ensure browser zoom is at 100%
+
+
+📞 NEXT STEPS
+================================================================================
+
+Interested in the full system?
+
+This demo shows the frontend dashboard with simulated data. The complete
+Command Center BlueIOT system includes:
+
+- Real camera integration (RTSP streams)
+- BlueIOT UWB hardware integration  
+- Backend services and APIs
+- Data storage and analytics
+- User authentication and management
+- Configuration interfaces
+
+Contact your representative to discuss:
+- Site survey and requirements
+- Pilot deployment
+- Pricing and timeline
+- Technical integration
+
+
+📁 PACKAGE CONTENTS
+================================================================================
+
+index.html              - Main entry point (open this!)
+assets/                 - Application bundle and styles
+README.md              - Complete documentation
+QUICKSTART.md          - 30-second getting started
+FEATURES.md            - Detailed feature list
+PRESENTATION_GUIDE.md  - Executive presentation script
+SCREENSHOT_GUIDE.md    - Media capture instructions
+DEPLOYMENT.md          - Web deployment options
+package-info.json      - Package metadata
+
+
+🌐 DEPLOYMENT OPTIONS
+================================================================================
+
+This demo can be deployed to any static hosting service:
+
+- Netlify, Vercel, GitHub Pages
+- AWS S3, Azure Static Web Apps, Cloudflare Pages
+- Any web server (Apache, Nginx, IIS)
+- Or share as a zip file
+
+See DEPLOYMENT.md for detailed instructions.
+
+
+✅ SYSTEM REQUIREMENTS
+================================================================================
+
+Browser: Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
+Display: 1920x1080 minimum (4K ready)
+Internet: Not required (all assets embedded)
+WebGL: Required for 3D rendering
+
+
+================================================================================
+  Ready to explore? Open index.html and start the demo!
+================================================================================

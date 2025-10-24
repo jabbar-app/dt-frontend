@@ -10,7 +10,9 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\"",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "package-demo": "node package-demo.js",
+    "build:demo": "npm run build && npm run package-demo"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.6",

@@ -1,0 +1,33 @@
+{
+  "name": "Command Center BlueIOT Demo",
+  "version": "1.0.0",
+  "type": "Standalone Frontend Demo",
+  "description": "Interactive 3D digital twin dashboard with simulated real-time tracking",
+  "features": [
+    "3D Floor Plan Visualization",
+    "Real-Time Entity Tracking",
+    "Occupancy Analytics",
+    "Alert Management",
+    "Historical Playback",
+    "Analytics Dashboard"
+  ],
+  "requirements": {
+    "browser": "Chrome 90+, Firefox 88+, Safari 14+, Edge 90+",
+    "display": "1920x1080 minimum",
+    "internet": "Not required (all assets embedded)"
+  },
+  "quickStart": [
+    "Extract the demo package",
+    "Open index.html in a web browser",
+    "Dashboard loads automatically with simulated data"
+  ],
+  "buildDate": "2025-10-24T03:32:22.987Z",
+  "technicalStack": {
+    "frontend": "React 19 with TypeScript",
+    "rendering": "Three.js with React Three Fiber",
+    "state": "Zustand",
+    "styling": "Tailwind CSS",
+    "charts": "Recharts",
+    "build": "Vite"
+  }
+}
